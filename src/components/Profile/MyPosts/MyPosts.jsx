@@ -1,7 +1,7 @@
 import React from "react";
 import s from './MyPosts.module.css';
 import Post from "./Post/Post";
-import { addPostCreator, updateNewPostTextCreator } from "../../../storage/state";
+import { addPostCreator, updateNewPostTextCreator } from "../../../redux/state";
 
 const MyPosts = (props) => {
   const postsElements = props.profilePage.posts.map( post => <Post id={post.id} post={post.post} likes={post.likes} /> );

@@ -1,3 +1,8 @@
+const ADD_POST = 'ADD_POST';
+const UPDATE_NEW_POST_TEXT = 'UPDATE_NEW_POST_TEXT';
+const SEND_MESSAGE = 'SEND_MESSAGE';
+const UPDATE_NEW_MESSAGE_TEXT = 'UPDATE_NEW_MESSAGE_TEXT';
+
 const store = {
   _state: {
     profilePage: {
@@ -28,39 +33,75 @@ const store = {
         {id: 6, name: 'Zoja'},
         {id: 7, name: 'Vitalik'},
       ],
+  
+      newMessageText: '',
+      placeholder: 'Enter you message',
     },
+  },
+
+  // Заглушка, используется для подстановки в нее требуемой функции
+  _callSubscriber() {
+    console.log('State');
   },
 
   getState() {
     return this._state;
   },
 
-  _callSubscriber() {
-    console.log('State');
-  },
-
-  addPost() {
-    const newPost = {
-      id: 7,
-      post: this._state.profilePage.newPostText,
-      likes: 0
-    }
-    this._state.profilePage.posts.push(newPost);
-    this._state.profilePage.newPostText = '';
-    this._callSubscriber(this._state)
-  },
-
-  updateNewPostText(text) {
-    this._state.profilePage.newPostText = text;
-    this._callSubscriber(this._state)
-  },
-
   // Используем для переопределения заглушки _callSubscriber на другую внешнюю функцию перерисовки визуальной части сайта
   subscribe(observer) {
     this._callSubscriber = observer; // pattern
+  },
+
+  dispatch (action) {   // { type: 'addPost'}
+    if (action.type === ADD_POST) {
+      const newPost = {
+        id: 7,
+        post: this._state.profilePage.newPostText,
+        likes: 0
+      }
+      this._state.profilePage.posts.push(newPost);
+      this._state.profilePage.newPostText = '';
+      this._callSubscriber(this._state)
+    } else if (action.type === UPDATE_NEW_POST_TEXT) {
+      this._state.profilePage.newPostText = action.newPostText;
+      this._callSubscriber(this._state)
+    } else if (action.type === UPDATE_NEW_MESSAGE_TEXT) {
+      this._state.dialogsPage.newMessageText = action.newMessageText;
+      this._callSubscriber(this._state)
+    } else if (action.type === SEND_MESSAGE) {
+      const newMessage = {
+        id: 7,
+        message: this._state.dialogsPage.newMessageText,
+      }
+      this._state.dialogsPage.messages.push(newMessage);
+      this._state.dialogsPage.newMessageText = '';
+      this._callSubscriber(this._state)
+    }
   }
 }
 
+// ------------ start POST  ---------------
+export const addPostCreator = () => ({type: ADD_POST})
+
+export const updateNewPostTextCreator = (newPostText) => {
+  return {
+    type: UPDATE_NEW_POST_TEXT,
+    newPostText: newPostText,
+  }
+}
+// ------------ end POST  ---------------
+
+// ------------ start  Message ---------------
+export const sendMessageCreator = () => ({type: SEND_MESSAGE})
+
+export const updateNewMessageTextCreator = (newMessageText) => {
+  return {
+    type: UPDATE_NEW_MESSAGE_TEXT,
+    newMessageText: newMessageText,
+  }
+}
+// ------------ end MESSAGE  ---------------
 
 export default store;
 window.store = store;

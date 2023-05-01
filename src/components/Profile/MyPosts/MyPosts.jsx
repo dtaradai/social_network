@@ -1,19 +1,19 @@
 import React from "react";
 import s from './MyPosts.module.css';
 import Post from "./Post/Post";
+import { addPostCreator, updateNewPostTextCreator } from "../../../storage/state";
 
 const MyPosts = (props) => {
-  
   const postsElements = props.profilePage.posts.map( post => <Post id={post.id} post={post.post} likes={post.likes} /> );
   const newPostElement = React.createRef();
   
   const addPost = () => {
-    props.addPost();
+    props.dispatch(addPostCreator());
   }
 
   const onPostChange = () => {
-    let text = newPostElement.current.value;
-    props.updateNewPostText(text);
+    const newPostText = newPostElement.current.value;
+    props.dispatch(updateNewPostTextCreator(newPostText));
   }
 
   return (

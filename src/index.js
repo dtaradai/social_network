@@ -4,20 +4,18 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import {Provider} from 'react-redux';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 // Функция которая отрисовывает визуальную часть сайта, используем при первоначальной загрузке и изменении объекта state
-let renderEntireTree = (state) => {
   root.render(
     <React.StrictMode>
-      <App  store={store} />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </React.StrictMode>
   );
-}
-renderEntireTree(store.getState());
-store.subscribe(renderEntireTree);
-
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

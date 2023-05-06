@@ -1,50 +1,83 @@
 import React from "react";
 import s from './Users.module.css';
+import axios from "axios";
+import photoDefault from './../../assets/images/photoDefault.jpg'
 
-let Users = (props) => {
-
-  if (props.users.length === 0) {
-    props.setUsers([
-      { id: 1, fullName: 'user1', followed: true, status: 'status1', location: { city: 'city1', country: 'country1' }, ava: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYC1MUr5qp4y37dbg0R5kSUgFhf7SpE7ndDQ&usqp=CAU' },
-      { id: 2, fullName: 'user2', followed: true, status: 'status2', location: { city: 'city2', country: 'country1' }, ava: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYC1MUr5qp4y37dbg0R5kSUgFhf7SpE7ndDQ&usqp=CAU' },
-      { id: 3, fullName: 'user3', followed: false, status: 'status3', location: { city: 'city3', country: 'country1' }, ava: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYC1MUr5qp4y37dbg0R5kSUgFhf7SpE7ndDQ&usqp=CAU' },
-      { id: 4, fullName: 'user4', followed: false, status: 'status4', location: { city: 'city4', country: 'country1' }, ava: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYC1MUr5qp4y37dbg0R5kSUgFhf7SpE7ndDQ&usqp=CAU' },
-    ])
+class Users extends React.Component {
+  componentDidMount() {
+    this.getUsers(this.props.curentPage, this.props.count);
+    // axios.get(`https://social-network.samuraijs.com/api/1.0/users?count=${this.props.count}&page=${this.props.curentPage}`).then(response => {
+    //   this.props.setUsers(response.data.items);
+    //   this.props.setTotalCount(response.data.totalCount);
+    // });
   }
 
-  return <div>
-    {
-      props.users.map(user => <div key={user.id}>
-        <div>
-          <div>
-            <img src={user.ava} alt="ava" />
-          </div>
-          <div>
-            {user.followed 
-              ? <button onClick={() => { props.unfollow(user.id) }}>Unollow</button> 
-              : <button onClick={() => { props.follow(user.id) }}>Follow</button>
-            }
-          </div>
-        </div>
-        <div>
-          <div>
-            <div>
-              {user.fullName}
-            </div>
-            <div>
-              {user.status}
-            </div>
-          </div>
-          <div>
-            <div>{user.location.country}</div>
-            <div>{user.location.city}</div>
-          </div>
-        </div>
-      </div>)
-    }
-    {/* <button onClick={addUser}>Add user</button> */}
+  getUsers(page, count) {
+    axios.get(`https://social-network.samuraijs.com/api/1.0/users?count=${count}&page=${page}`)
+    .then(response => {
+      this.props.setTotalCount(response.data.totalCount);
+      this.props.setUsers(response.data.items);
+    });
+  }
 
-  </div>
+  onPageChanged = (curentPage) => {
+    this.props.setCurentPage(curentPage)
+    this.getUsers(curentPage, this.props.count);
+
+    // axios.get(`https://social-network.samuraijs.com/api/1.0/users?count=${this.props.count}&page=${curentPage}`).then(response => {
+    //   this.props.setUsers(response.data.items);
+    //   this.props.setTotalCount(response.data.totalCount);
+    // });
+  }
+
+  render() {
+    let pagesCount = Math.ceil(this.props.totalCount / this.props.count);
+    let pages = [];
+
+    for (let i = 1; i <= pagesCount; i++) {
+      pages.push(i);
+    }
+
+    return <div>
+      <div>
+        {pages.map(page => {
+          return <span className={this.props.curentPage === page ? s.selectedPage : ''}
+          onClick={ () => {this.onPageChanged(page)} } key={page}>
+            {page}
+          </span>
+        })}
+      </div>
+      {
+        this.props.users.map(user => <div key={user.id}>
+          <div>
+            <div>
+              <img src={user.photos.small != null ? user.photos.small : photoDefault} alt="ava" />
+            </div>
+            <div>
+              {user.followed
+                ? <button onClick={() => { this.props.unfollow(user.id) }}>Unollow</button>
+                : <button onClick={() => { this.props.follow(user.id) }}>Follow</button>
+              }
+            </div>
+          </div>
+          <div>
+            <div>
+              <div>
+                {user.name}
+              </div>
+              <div>
+                {user.status}
+              </div>
+            </div>
+            <div>
+              <div>{'user.location.country'}</div>
+              <div>{'user.location.city'}</div>
+            </div>
+          </div>
+        </div>)
+      }
+    </div>
+  }
 }
 
 export default Users;

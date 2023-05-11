@@ -2,8 +2,13 @@ import React from 'react';
 import s from  './ProfileInfo.module.css';
 import banner from './images/banner1200x150.jpg';
 import ava from './images/ava.jpg';
+import Preloader from '../../common/Preloader/Preloader';
 
-const ProfileInfo = () => {
+const ProfileInfo = (props) => {
+  if (!props.profile) {
+    return <Preloader />
+  }
+
   return (
     <div>
       <div className={s.banner}>
@@ -11,10 +16,10 @@ const ProfileInfo = () => {
       </div>
       <div className={s.description__block}>
         <div>
-          <img className={s.ava} src={ava} alt='ava' />
+          <img className={s.ava} src={props.profile.photos.large != null ? props.profile.photos.large : ava } alt='ava' />
         </div>
         <div>
-          Description
+          {props.profile.aboutMe}
         </div>
       </div>
   </div>

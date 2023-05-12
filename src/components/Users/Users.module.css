@@ -5,3 +5,14 @@ img {
 .selectedPage {
   font-weight: 900;
 }
+
+.pagination {
+  width: 1000px;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.pagination__item + .pagination__item{
+  padding-left: 3px;
+}

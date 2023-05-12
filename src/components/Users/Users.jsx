@@ -12,9 +12,9 @@ const Users = (props) => {
   }
 
   return <div>
-    <div>
+    <div className={s.pagination}>
       {pages.map(page => {
-        return <span className={props.curentPage === page ? s.selectedPage : ''}
+        return <span className={(props.curentPage === page ? s.selectedPage : '') + ' ' + s.pagination__item}
           onClick={() => { props.onPageChanged(page) }} key={page}>
           {page}
         </span>

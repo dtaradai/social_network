@@ -8,3 +8,11 @@
 .logo {
   height: 100%;
 }
+
+.loginBlock {
+  padding: 20px;
+}
+.loginBlock a{
+  color: crimson;
+  font-weight: 900;
+}

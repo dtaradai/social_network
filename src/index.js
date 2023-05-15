@@ -10,11 +10,11 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 // Функция которая отрисовывает визуальную часть сайта, используем при первоначальной загрузке и изменении объекта state
   root.render(
-    <React.StrictMode>
+    // <React.StrictMode>
       <Provider store={store}>
         <App />
       </Provider>
-    </React.StrictMode>
+    // </React.StrictMode>
   );
 
 // If you want to start measuring performance in your app, pass a function
